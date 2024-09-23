@@ -10,6 +10,22 @@
 #include <fstream>
 
 
+void printArray(const std::vector<int>& arr, int start_idx, int end_idx) {
+
+    /*
+        Description:
+            Prints the array from start_idx to end_idx provided in arguments else prints entire array.
+
+        Returns:
+            Void
+    */
+
+    for(int i=start_idx; i<end_idx; i++){
+        std::cout << std::setprecision(2) << std::fixed << arr[i] << std::endl;
+    }
+    std::cout << std::endl;
+}
+
 struct ReadFileReturnValue {
 
     /*
@@ -17,7 +33,7 @@ struct ReadFileReturnValue {
             Structure to encapsulate the return values of readFile function.
     */
 
-    std::vector<double> arr;
+    std::vector<int> arr;
     int n;
 };
 
@@ -28,23 +44,28 @@ ReadFileReturnValue readFile() {
             Reads input from stdin: first line as count, subsequent lines as elements of the array.
 
         Returns:
-            array: array of double data type
+            array: array of int data type
             n: number of elements in the array
     */
 
     int n = 0;
-    std::vector<double> arr;
-    std::string line;
+    std::vector<int> arr;
 
+    std::cin >> n;
+    std::cout << "n: " << n << std::endl;
     
-    if (std::getline(std::cin, line)){
-        n = std::atoi(line.c_str());
-
-        while (std::getline(std::cin, line)) {
-            arr.push_back(std::atof(line.c_str()));
+    for (int i = 0; i < n; ++i) {
+        int num;
+        if (std::cin >> num) {
+            arr.push_back(num);
+        } else {
+            // Handle input error
+            std::cerr << "Error reading input at position " << i << std::endl;
+            break;
         }
     }
-    
+
+    printArray(arr, 0, n);
     return {arr, n};
 }
 
@@ -66,7 +87,7 @@ int random_number_generator(int low, int high){
 }
 
 
-int partition(std::vector<double>& arr, int low, int high){
+int partition(std::vector<int>& arr, int low, int high){
 
     /*
         Description:
@@ -78,7 +99,7 @@ int partition(std::vector<double>& arr, int low, int high){
             - The returned index is used to divide the array for subsequent recursive calls.
 
         Args:
-            arr: (vector<double>) - array of double data type
+            arr: (vector<int>) - array of int data type
             low: (int) - lower bound of the array
             high: (int) - upper bound of the array
 
@@ -91,7 +112,7 @@ int partition(std::vector<double>& arr, int low, int high){
     }
 
     int pivotIndex = random_number_generator(low, high);
-    double pivot = arr[pivotIndex];
+    int pivot = arr[pivotIndex];
 
 	int i = low-1;
 	int j = high+1;
@@ -114,7 +135,7 @@ int partition(std::vector<double>& arr, int low, int high){
 	}
 }
 
-void quickSort(std::vector<double>& arr, int low, int high){
+void quickSort(std::vector<int>& arr, int low, int high){
 
     /*
         Description:
@@ -143,22 +164,6 @@ void quickSort(std::vector<double>& arr, int low, int high){
     }
 }
 
-void printArray(const std::vector<double>& arr, int start_idx, int end_idx) {
-
-    /*
-        Description:
-            Prints the array from start_idx to end_idx provided in arguments else prints entire array.
-
-        Returns:
-            Void
-    */
-
-    for(int i=start_idx; i<end_idx; i++){
-        std::cout << std::setprecision(2) << std::fixed << arr[i] << std::endl;
-    }
-    std::cout << std::endl;
-}
-
 int main(int argc, char *argv[]){
 
     /*
@@ -177,10 +182,10 @@ int main(int argc, char *argv[]){
    
     ReadFileReturnValue readFileReturnValue = readFile();
     int n = readFileReturnValue.n;
-    std::vector<double> arr = readFileReturnValue.arr;
+    std::vector<int> arr = readFileReturnValue.arr;
 
     int start_idx = 0;
-    int end_idx = n-1;
+    int end_idx = n;
     if (argc > 1) {
         
         // choosing the max of 0 and the start index provided as argument to handle negative index case.
@@ -190,7 +195,7 @@ int main(int argc, char *argv[]){
         end_idx = std::atoi(argv[2])-1;
     }
 
-    if (start_idx < 0 || end_idx > n-1) {
+    if (start_idx < 0 || end_idx > n) {
         std::cout << "Invalid start or end index to print subset of sorted array!" << std::endl;
         return 0;
     }

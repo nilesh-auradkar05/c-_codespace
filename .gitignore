@@ -30,3 +30,12 @@
 *.exe
 *.out
 *.app
+
+# Custom to ignore files
+graph1.txt
+graph30k.txt
+small.txt
+trial.cpp
+dijkstra
+dijkstra algo
+.trial.cpp.swp
